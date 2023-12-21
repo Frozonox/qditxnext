@@ -1,7 +1,12 @@
 import React from "react";
+import ViewAdmins from "./ViewAdmins";
 
 function page() {
-	return <div>page</div>;
+	return (
+		<>
+			<ViewAdmins />;<div>page</div>
+		</>
+	);
 }
 
 export default page;
