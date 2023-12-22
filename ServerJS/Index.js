@@ -144,9 +144,9 @@ app.get(
         LIMIT 25
         OFFSET ${offset}
       `;
-			console.log(usuariosQuery);
+		
 			// Execute the MySQL query
-			// Luego, crea un array con los valores de los parámetros
+			//array con los valores de los parámetros
 			const queryParams = [cc, `%${nuser}%`, names, last_names, numero, estado];
 
 			conexion.query(usuariosQuery, queryParams, (error, results) => {

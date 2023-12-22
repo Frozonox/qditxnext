@@ -4,7 +4,7 @@ import ViewAdmins from "./ViewAdmins";
 function page() {
 	return (
 		<>
-			<ViewAdmins />;<div>page</div>
+			<ViewAdmins />
 		</>
 	);
 }
