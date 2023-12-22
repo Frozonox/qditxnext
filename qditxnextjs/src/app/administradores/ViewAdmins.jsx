@@ -74,46 +74,6 @@ function ViewAdmins() {
 	function buscar() {
 		getAdmins(pageNumber, { cc, nuser, names, last_names, numero, estado });
 	}
-	// function buscar() {
-	// 	let filteredUsers = users;
-
-	// 	if (cc) {
-	// 		filteredUsers = filteredUsers.filter(
-	// 			(dato) => dato.identification === cc
-	// 		);
-	// 	}
-
-	// 	if (nuser) {
-	// 		filteredUsers = filteredUsers.filter(
-	// 			(dato) => dato.user_name && dato.user_name.includes(nuser)
-	// 		);
-	// 	}
-
-	// 	if (names) {
-	// 		filteredUsers = filteredUsers.filter((dato) => dato.name === names);
-	// 	}
-	// 	if (last_names) {
-	// 		filteredUsers = filteredUsers.filter(
-	// 			(dato) => dato.last_name === last_names
-	// 		);
-	// 	}
-	// 	if (numero) {
-	// 		filteredUsers = filteredUsers.filter((dato) => dato.movil === numero);
-	// 	}
-	// 	if (estado) {
-	// 		// Aquí debes usar '==' o '===' para comparar, no '='
-	// 		if (estado === "activo") {
-	// 			filteredUsers = filteredUsers.filter(
-	// 				(dato) => dato.status === "ACTIVE"
-	// 			);
-	// 		} else {
-	// 			filteredUsers = filteredUsers.filter(
-	// 				(dato) => dato.status === "INACTIVE"
-	// 			);
-	// 		}
-	// 	}
-	// 	setResults(filteredUsers);
-	// }
 
 	function limpiar() {
 		const initialFilters = {
@@ -127,13 +87,13 @@ function ViewAdmins() {
 
 		setCurrentFilters(initialFilters);
 		getAdmins(0, initialFilters);
-		// setNuser("");
-		// setCc("");
-		// setLast_names("");
-		// setNames("");
-		// setNumero("");
-		// setEstado("");
-		// setResults(users);
+		setNuser("");
+		setCc("");
+		setLast_names("");
+		setNames("");
+		setNumero("");
+		setEstado("");
+		setResults(users);
 	}
 
 	function paginacion(page) {
