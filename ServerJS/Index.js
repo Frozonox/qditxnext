@@ -63,7 +63,7 @@ let verifyToken = (req, res, next) => {
 			// Almacenar información del usuario en el objeto de solicitud
 			token = Gtoken;
 			req.user = decoded;
-			console.log(token);
+
 			next();
 		}
 	});
@@ -78,27 +78,78 @@ app.get(
 	},
 	async (req, res) => {
 		try {
-			const usuarios = `
-  SELECT
-    us.id,
-    us.name,
-    us.last_name,
-    us.user_name,
-    us.identification,
-    us.movil,
-    us.status,
-    GROUP_CONCAT(rl.name) AS roles
-  FROM
-    user us
-    LEFT JOIN user_role ur ON us.id = ur.user_id
-    LEFT JOIN role rl ON rl.id = ur.role_id
-  GROUP BY
-    us.id
-	Limit 25
-`;
+			const {
+				page = 0,
+				cc,
+				nuser,
+				names,
+				last_names,
+				numero,
+				estado,
+			} = req.query;
 
+			let offset = page * 25;
+
+			let usuariosQuery = `
+        SELECT
+          us.id,
+          us.name,
+          us.last_name,
+          us.user_name,
+          us.identification,
+          us.movil,
+          us.status,
+          GROUP_CONCAT(rl.name) AS roles
+        FROM
+          user us
+          LEFT JOIN user_role ur ON us.id = ur.user_id
+          LEFT JOIN role rl ON rl.id = ur.role_id
+      `;
+
+			let whereClauses = [];
+
+			if (cc) {
+				whereClauses.push(`us.identification = '${cc}'`);
+			}
+
+			if (nuser) {
+				whereClauses.push(`us.user_name LIKE '%${nuser}%'`);
+			}
+
+			if (names) {
+				whereClauses.push(`us.name = '${names}'`);
+			}
+
+			if (last_names) {
+				whereClauses.push(`us.last_name = '${last_names}'`);
+			}
+
+			if (numero) {
+				whereClauses.push(`us.movil = '${numero}'`);
+			}
+
+			if (estado) {
+				whereClauses.push(
+					`us.status = '${estado === "activo" ? "ACTIVE" : "INACTIVE"}'`
+				);
+			}
+
+			if (whereClauses.length > 0) {
+				usuariosQuery += ` WHERE ${whereClauses.join(" AND ")}`;
+			}
+
+			usuariosQuery += `
+        GROUP BY
+          us.id
+        LIMIT 25
+        OFFSET ${offset}
+      `;
+			console.log(usuariosQuery);
 			// Execute the MySQL query
-			conexion.query(usuarios, (error, results) => {
+			// Luego, crea un array con los valores de los parámetros
+			const queryParams = [cc, `%${nuser}%`, names, last_names, numero, estado];
+
+			conexion.query(usuariosQuery, queryParams, (error, results) => {
 				if (error) {
 					console.log(error);
 					res.status(500).json({ error: "Internal Server Error" });

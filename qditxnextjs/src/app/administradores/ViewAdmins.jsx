@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
@@ -12,10 +12,48 @@ function ViewAdmins() {
 	const [last_names, setLast_names] = useState("");
 	const [numero, setNumero] = useState("");
 	const [estado, setEstado] = useState("");
-	const getAdmins = async () => {
+	const [pageNumber, setPageNumber] = useState(0);
+	const isFirstRender = useRef(true);
+	const [currentFilters, setCurrentFilters] = useState({});
+
+	const getAdmins = async (page, filters) => {
 		try {
-			const traer = await fetch("http://localhost:8080/users");
-			const jsonData = await traer.json();
+			console.log("Page: " + page);
+
+			// Construye la URL con los parámetros de filtro si están presentes
+			let url = `http://localhost:8080/users?page=${page}`;
+
+			if (filters) {
+				const { cc, nuser, names, last_names, numero, estado } = filters;
+
+				if (cc) {
+					url += `&cc=${cc}`;
+				}
+
+				if (nuser) {
+					url += `&nuser=${nuser}`;
+				}
+
+				if (names) {
+					url += `&names=${names}`;
+				}
+
+				if (last_names) {
+					url += `&last_names=${last_names}`;
+				}
+
+				if (numero) {
+					url += `&numero=${numero}`;
+				}
+
+				if (estado) {
+					url += `&estado=${estado}`;
+				}
+			}
+			console.log("URL " + url);
+			const response = await fetch(url);
+			const jsonData = await response.json();
+
 			setUsers(jsonData);
 			setResults(jsonData);
 		} catch (err) {
@@ -24,58 +62,87 @@ function ViewAdmins() {
 	};
 
 	useEffect(() => {
-		getAdmins();
-	}, []);
+		// Evita que se ejecute durante la renderización inicial "indefinida"
+		if (isFirstRender.current) {
+			isFirstRender.current = false;
+			return;
+		}
+
+		getAdmins(pageNumber);
+	}, [pageNumber]);
 
 	function buscar() {
-		let filteredUsers = users;
-
-		if (cc) {
-			filteredUsers = filteredUsers.filter(
-				(dato) => dato.identification === cc
-			);
-		}
-
-		if (nuser) {
-			filteredUsers = filteredUsers.filter(
-				(dato) => dato.user_name && dato.user_name.includes(nuser)
-			);
-		}
-
-		if (names) {
-			filteredUsers = filteredUsers.filter((dato) => dato.name === names);
-		}
-		if (last_names) {
-			filteredUsers = filteredUsers.filter(
-				(dato) => dato.last_name === last_names
-			);
-		}
-		if (numero) {
-			filteredUsers = filteredUsers.filter((dato) => dato.movil === numero);
-		}
-		if (estado) {
-			// Aquí debes usar '==' o '===' para comparar, no '='
-			if (estado === "activo") {
-				filteredUsers = filteredUsers.filter(
-					(dato) => dato.status === "ACTIVE"
-				);
-			} else {
-				filteredUsers = filteredUsers.filter(
-					(dato) => dato.status === "INACTIVE"
-				);
-			}
-		}
-		setResults(filteredUsers);
+		getAdmins(pageNumber, { cc, nuser, names, last_names, numero, estado });
 	}
+	// function buscar() {
+	// 	let filteredUsers = users;
+
+	// 	if (cc) {
+	// 		filteredUsers = filteredUsers.filter(
+	// 			(dato) => dato.identification === cc
+	// 		);
+	// 	}
+
+	// 	if (nuser) {
+	// 		filteredUsers = filteredUsers.filter(
+	// 			(dato) => dato.user_name && dato.user_name.includes(nuser)
+	// 		);
+	// 	}
+
+	// 	if (names) {
+	// 		filteredUsers = filteredUsers.filter((dato) => dato.name === names);
+	// 	}
+	// 	if (last_names) {
+	// 		filteredUsers = filteredUsers.filter(
+	// 			(dato) => dato.last_name === last_names
+	// 		);
+	// 	}
+	// 	if (numero) {
+	// 		filteredUsers = filteredUsers.filter((dato) => dato.movil === numero);
+	// 	}
+	// 	if (estado) {
+	// 		// Aquí debes usar '==' o '===' para comparar, no '='
+	// 		if (estado === "activo") {
+	// 			filteredUsers = filteredUsers.filter(
+	// 				(dato) => dato.status === "ACTIVE"
+	// 			);
+	// 		} else {
+	// 			filteredUsers = filteredUsers.filter(
+	// 				(dato) => dato.status === "INACTIVE"
+	// 			);
+	// 		}
+	// 	}
+	// 	setResults(filteredUsers);
+	// }
 
 	function limpiar() {
-		setNuser("");
-		setCc("");
-		setLast_names("");
-		setNames("");
-		setNumero("");
-		setEstado("");
-		setResults(users);
+		const initialFilters = {
+			cc: "",
+			nuser: "",
+			names: "",
+			last_names: "",
+			numero: "",
+			estado: "",
+		};
+
+		setCurrentFilters(initialFilters);
+		getAdmins(0, initialFilters);
+		// setNuser("");
+		// setCc("");
+		// setLast_names("");
+		// setNames("");
+		// setNumero("");
+		// setEstado("");
+		// setResults(users);
+	}
+
+	function paginacion(page) {
+		if (page === 1) {
+			setPageNumber(pageNumber + 1);
+		} else if (page === 0 && pageNumber > 0) {
+			setPageNumber(pageNumber - 1);
+		}
+		getAdmins(pageNumber);
 	}
 
 	return (
@@ -191,6 +258,9 @@ function ViewAdmins() {
 						))}
 				</tbody>
 			</table>
+			<button onClick={() => paginacion(0)}>Anterior</button>
+			<span>Página {pageNumber + 1}</span>
+			<button onClick={() => paginacion(1)}>Siguiente</button>
 		</>
 	);
 }
