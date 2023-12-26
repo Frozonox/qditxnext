@@ -5,6 +5,9 @@ const conexion = require("./Conexion");
 const port = 8080;
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const { verifyToken } = require("./AuthMiddleware");
+const RouterUsers = require("./Rutas/UsersController");
+const RouterCompany = require("./Rutas/CompanysController");
 
 app.use(cors());
 app.use(express.json());
@@ -47,123 +50,8 @@ app.post("/login", (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
-
-let Gtoken;
-
-let verifyToken = (req, res, next) => {
-	let token = req.headers["authorization"];
-
-	if (!token) {
-		return res.status(401).json({ error: "Token no proporcionado" });
-	}
-	jwt.verify(token, "secreto_del_token", (err, decoded) => {
-		if (err) {
-			return res.status(403).json({ error: "Token inválido" });
-		} else {
-			// Almacenar información del usuario en el objeto de solicitud
-			token = Gtoken;
-			req.user = decoded;
-
-			next();
-		}
-	});
-};
-
-app.get(
-	"/users",
-	(req, res, next) => {
-		req.headers["authorization"] = Gtoken;
-
-		verifyToken(req, res, next);
-	},
-	async (req, res) => {
-		try {
-			const {
-				page = 0,
-				cc,
-				nuser,
-				names,
-				last_names,
-				numero,
-				estado,
-			} = req.query;
-
-			let offset = page * 25;
-
-			let usuariosQuery = `
-        SELECT
-          us.id,
-          us.name,
-          us.last_name,
-          us.user_name,
-          us.identification,
-          us.movil,
-          us.status,
-          GROUP_CONCAT(rl.name) AS roles
-        FROM
-          user us
-          LEFT JOIN user_role ur ON us.id = ur.user_id
-          LEFT JOIN role rl ON rl.id = ur.role_id
-      `;
-
-			let whereClauses = [];
-
-			if (cc) {
-				whereClauses.push(`us.identification = '${cc}'`);
-			}
-
-			if (nuser) {
-				whereClauses.push(`us.user_name LIKE '%${nuser}%'`);
-			}
-
-			if (names) {
-				whereClauses.push(`us.name = '${names}'`);
-			}
-
-			if (last_names) {
-				whereClauses.push(`us.last_name = '${last_names}'`);
-			}
-
-			if (numero) {
-				whereClauses.push(`us.movil = '${numero}'`);
-			}
-
-			if (estado) {
-				whereClauses.push(
-					`us.status = '${estado === "activo" ? "ACTIVE" : "INACTIVE"}'`
-				);
-			}
-
-			if (whereClauses.length > 0) {
-				usuariosQuery += ` WHERE ${whereClauses.join(" AND ")}`;
-			}
-
-			usuariosQuery += `
-        GROUP BY
-          us.id
-        LIMIT 25
-        OFFSET ${offset}
-      `;
-		
-			// Execute the MySQL query
-			//array con los valores de los parámetros
-			const queryParams = [cc, `%${nuser}%`, names, last_names, numero, estado];
-
-			conexion.query(usuariosQuery, queryParams, (error, results) => {
-				if (error) {
-					console.log(error);
-					res.status(500).json({ error: "Internal Server Error" });
-				} else {
-					// Send the results back to the client
-					res.status(200).json(results);
-				}
-			});
-		} catch (error) {
-			console.log(error);
-			res.status(500).json({ error: "Internal Server Error" });
-		}
-	}
-);
+app.use("/users", RouterUsers);
+app.use("/companys", RouterCompany);
 
 // Set up our server so it will listen on the port
 app.listen(port, function (error) {
