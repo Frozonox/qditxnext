@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const { verifyToken } = require("./AuthMiddleware");
 const RouterUsers = require("./Rutas/UsersController");
 const RoutersCompany = require("./Rutas/CompanysController");
+const RouterOpportunitys = require("./Rutas/OpportunitysController");
 
 app.use(cors());
 app.use(express.json());
@@ -52,6 +53,7 @@ app.post("/login", (req, res) => {
 });
 app.use("/users", RouterUsers);
 app.use("/companys", RoutersCompany);
+app.use("/opportunitys", RouterOpportunitys);
 
 // Set up our server so it will listen on the port
 app.listen(port, function (error) {

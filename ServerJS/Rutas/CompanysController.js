@@ -1,4 +1,3 @@
-// RouterCompany.js
 const express = require("express");
 const RoutersCompany = express.Router();
 const conexion = require("../Conexion");
