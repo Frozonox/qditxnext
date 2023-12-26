@@ -103,10 +103,11 @@ border-bottom: 1px solid #e5e7eb;
 }
 .btn222 :hover
 {
+  box-shadow: 0px 0px 2px 2px blue;
   border-radius: 50%;
   width: 1.5rem;
-    height: 1.5rem;
-  box-shadow: 0px 0px 2px 2px blue;
+  height: 1.5rem;
+  
 }
 [data-collapse="true"]
 {

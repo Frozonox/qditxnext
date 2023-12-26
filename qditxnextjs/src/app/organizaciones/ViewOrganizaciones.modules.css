@@ -1,0 +1,50 @@
+.last__page
+{
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px;
+    margin: 4px;
+}
+.next__page
+{
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px;
+    margin: 4px;
+}
+.pager
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Header
+{
+    background-color: black;
+    color: white;
+    padding: 30px;
+}
+.filter__btn
+{
+    background-color: rgb(25, 87, 255);
+    color: white;
+    margin: 4px;
+    border: none;
+    padding: 8px;
+    border-radius: 30px;
+    width: max-content;
+}
+.filter__btn__second
+{
+    background-color: rgb(73, 73, 73);
+    color: white;
+    margin: 4px;
+    border: none;
+    padding: 8px;
+    border-radius: 30px;
+    width: max-content;
+}
