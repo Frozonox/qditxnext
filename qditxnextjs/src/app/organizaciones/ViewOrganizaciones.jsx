@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
 export default function ViewOrganizaciones() {
@@ -133,7 +134,7 @@ export default function ViewOrganizaciones() {
 		<>
 			<h1 className="text-dark center text-center">Lista de Entidades</h1>
 
-			<div className="row">
+			<div className="row justify-content-end">
 				<div className="col-md-2">
 					<input
 						value={nit}
@@ -205,36 +206,40 @@ export default function ViewOrganizaciones() {
 				</div>
 
 				<div className="col-md-2">
-					<label htmlFor="fechaInicio">Fecha de Inicio:</label>
+					<label htmlFor="fechaInicio" className="form-label">
+						Desde Fecha de Creación:
+					</label>
 					<input
 						type="date"
 						id="fechaInicio"
 						name="fechaInicio"
 						value={fechaInicio}
 						onChange={(e) => setFechaInicio(e.target.value)}
+						className="form-control custom-date-picker"
 					/>
 				</div>
 
 				<div className="col-md-2">
-					<label htmlFor="fechaFin">Fecha Fin:</label>
+					<label htmlFor="fechaFin" className="form-label">
+						Hasta Fecha de Creación:
+					</label>
 					<input
 						type="date"
 						id="fechaFin"
 						name="fechaFin"
 						value={fechaFin}
 						onChange={(e) => setFechaFin(e.target.value)}
+						className="form-control custom-date-picker"
 					/>
 				</div>
 
-				<div className="row mt-2">
-					<div className="col-md-6">
-						<button className="btn btn-primary mr-2" onClick={buscar}>
-							Buscar
-						</button>
-						<button className="btn btn-secondary" onClick={limpiar}>
-							Limpiar
-						</button>
-					</div>
+				<div className="col-md-7 mt-5">
+					<button className="btn btn-primary mr-2" onClick={buscar}>
+						Buscar
+					</button>
+					<button className="btn btn-secondary" onClick={limpiar}>
+						Limpiar
+					</button>
 				</div>
 			</div>
 			<table className="table table-striped table-bordered table-hover mt-5 text-center">

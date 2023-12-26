@@ -207,7 +207,7 @@ app.get(
 			}
 
 			if (csector) {
-				whereClauses.push(`c.business_sector = '${csector}'`);
+				whereClauses.push(`i.value = '${csector}'`);
 			}
 
 			if (ccountry) {
