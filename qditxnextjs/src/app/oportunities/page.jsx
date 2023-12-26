@@ -1,5 +1,5 @@
 import React from "react";
-import ViewAdmins from "./ViewAdmins";
+import ViewOportunities from "./viewOportunities";
 
 function page() {
 	return (
