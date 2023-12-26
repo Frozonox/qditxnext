@@ -14,7 +14,6 @@ function ViewAdmins() {
 	const [estado, setEstado] = useState("");
 	const [pageNumber, setPageNumber] = useState(0);
 	const isFirstRender = useRef(true);
-	const [currentFilters, setCurrentFilters] = useState({});
 
 	const getAdmins = async (page, filters) => {
 		try {
@@ -85,7 +84,6 @@ function ViewAdmins() {
 			estado: "",
 		};
 
-		setCurrentFilters(initialFilters);
 		getAdmins(0, initialFilters);
 		setNuser("");
 		setCc("");
