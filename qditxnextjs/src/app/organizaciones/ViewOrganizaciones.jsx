@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import './ViewOrganizaciones.modules.css'
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
 export default function ViewOrganizaciones() {
@@ -131,7 +132,8 @@ export default function ViewOrganizaciones() {
 
 	return (
 		<>
-			<h1 className="text-dark center text-center">Lista de Entidades</h1>
+		<div className="Header">
+			<h1 className="text-light center text-center">Lista de Entidades</h1>
 
 			<div className="row justify-content-end">
 				<div className="col-md-2">
@@ -231,14 +233,15 @@ export default function ViewOrganizaciones() {
 				</div>
 
 				<div className="col-md-7 mt-5">
-					<button className="btn btn-primary mr-2" onClick={buscar}>
+					<button className="filter__btn" onClick={buscar}>
 						Buscar
 					</button>
-					<button className="btn btn-secondary" onClick={limpiar}>
+					<button className="filter__btn__second" onClick={limpiar}>
 						Limpiar
 					</button>
 				</div>
-			</div>
+				</div>
+		</div>
 			<table className="table table-striped table-bordered table-hover mt-5 text-center">
 				<thead className="thead-dark">
 					<tr>
@@ -274,9 +277,11 @@ export default function ViewOrganizaciones() {
 						))}
 				</tbody>
 			</table>
-			<button onClick={() => paginacion(0)}>Anterior</button>
+			<div className="pager">
+			<button className="last__page" onClick={() => paginacion(0)}>Anterior</button>
 			<span>Página {pageNumber + 1}</span>
-			<button onClick={() => paginacion(1)}>Siguiente</button>
+			<button className="next__page" onClick={() => paginacion(1)}>Siguiente</button>
+			</div>
 		</>
 	);
 }

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./ViewAdmins.modules.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
@@ -111,87 +112,89 @@ function ViewAdmins() {
 	return (
 		<>
 			<div className="Header">
-			<h1 className="text-light center text-center">Lista de Administradores</h1>
-			<div className="row">
-				<div className="col-md-2">
-					<input
-						value={cc}
-						onChange={(e) => {
-							setCc(e.target.value);
-						}}
-						type="number"
-						placeholder="Por Identificacion"
-						className="form-control"
-					/>
-				</div>
-				<div className="col-md-2">
-					<input
-						value={nuser}
-						onChange={(e) => {
-							setNuser(e.target.value);
-						}}
-						type="text"
-						placeholder="Por Nombre de Usuario"
-						className="form-control"
-					/>
-				</div>
-				<div className="col-md-2">
-					<input
-						value={names}
-						onChange={(e) => {
-							setNames(e.target.value);
-						}}
-						type="text"
-						placeholder="Por Nombre"
-						className="form-control"
-					/>
-				</div>
-				<div className="col-md-2">
-					<input
-						value={last_names}
-						onChange={(e) => {
-							setLast_names(e.target.value);
-						}}
-						type="text"
-						placeholder="Por Apellidos"
-						className="form-control"
-					/>
-				</div>
-				<div className="col-md-2">
-					<input
-						value={numero}
-						onChange={(e) => {
-							setNumero(e.target.value);
-						}}
-						type="text"
-						placeholder="Por Numero Telefonico"
-						className="form-control"
-					/>
-				</div>
-				<div className="col-md-2">
-					<select
-						value={estado}
-						onChange={(e) => {
-							setEstado(e.target.value);
-						}}
-						className="form-control"
-					>
-						<option value="">Filtro por Estado</option>
-						<option value="activo">Activo</option>
-						<option value="inactivo">Inactivo</option>
-					</select>
-				</div>
-				<div className="row mt-2">
-					<div className="col-md-6">
-						<button className="filter__btn" onClick={buscar}>
-							Buscar
-						</button>
-						<button className="filter__btn__second" onClick={limpiar}>
-							Limpiar
-						</button>
-						</div>
+				<h1 className="text-light center text-center">Lista de Administradores</h1>
+				<div className="row">
+					<div className="col-md-2">
+						<input
+							value={cc}
+							onChange={(e) => {
+								setCc(e.target.value);
+							}}
+							type="number"
+							placeholder="Por Identificacion"
+							className="form-control"
+						/>
 					</div>
-				</div>
+					<div className="col-md-2">
+						<input
+							value={nuser}
+							onChange={(e) => {
+								setNuser(e.target.value);
+							}}
+							type="text"
+							placeholder="Por Nombre de Usuario"
+							className="form-control"
+						/>
+					</div>
+					<div className="col-md-2">
+						<input
+							value={names}
+							onChange={(e) => {
+								setNames(e.target.value);
+							}}
+							type="text"
+							placeholder="Por Nombre"
+							className="form-control"
+						/>
+					</div>
+					<div className="col-md-2">
+						<input
+							value={last_names}
+							onChange={(e) => {
+								setLast_names(e.target.value);
+							}}
+							type="text"
+							placeholder="Por Apellidos"
+							className="form-control"
+						/>
+					</div>
+					<div className="col-md-2">
+						<input
+							value={numero}
+							onChange={(e) => {
+								setNumero(e.target.value);
+							}}
+							type="text"
+							placeholder="Por Numero Telefonico"
+							className="form-control"
+						/>
+					</div>
+					<div className="col-md-2">
+						<select
+							value={estado}
+							onChange={(e) => {
+								setEstado(e.target.value);
+							}}
+							className="form-control"
+						>
+							<option value="">Filtro por Estado</option>
+							<option value="activo">Activo</option>
+							<option value="inactivo">Inactivo</option>
+						</select>
+					</div>
+					<div className="row mt-2">
+						<div className="col-md-6">
+							<button className="filter__btn" onClick={buscar}>
+								Buscar
+							</button>
+							<button className="filter__btn__second" onClick={limpiar}>
+								Limpiar
+							</button>
+							</div>
+						</div>
+						
+					</div>
+				
 			</div>
 			<table className="table table-striped table-bordered table-hover mt-5 text-center">
 				<thead className="thead-dark">
