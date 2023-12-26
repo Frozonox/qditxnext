@@ -1,10 +1,10 @@
 // RouterCompany.js
 const express = require("express");
-const RouterCompany = express.Router();
+const RoutersCompany = express.Router();
 const conexion = require("../Conexion");
 const { verifyToken } = require("../AuthMiddleware");
 
-RouterCompany.get(
+RoutersCompany.get(
 	"/",
 	(req, res, next) => {
 		// Asigna el token a la variable Gtoken
@@ -133,4 +133,4 @@ RouterCompany.get(
 	}
 );
 
-module.exports = RouterCompany;
+module.exports = RoutersCompany;
