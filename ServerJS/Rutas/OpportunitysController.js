@@ -19,7 +19,7 @@ RouterOpportunitys.get(
 			const pageSize = 25; // Tamaño de la página
 
 			// Calcular los límites del rango
-			const start = page * pageSize + 1;
+			const start = page === 0 ? 9 : page * pageSize + 1;
 			const end = (page + 1) * pageSize;
 
 			let opportunityQuery = `
