@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
+
 function App() {
 
   const router = useRouter();
@@ -36,7 +37,7 @@ function App() {
       });
 
       if (response.ok) {
-         router.push("/administradores");
+         router.push("/dashboard");
       } else {
         alert("Algo ha salido mal");
       }
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <>
+      
       <div className="top-band bg-primary text-white text-left py-2">
         Plataforma educativa
       </div>

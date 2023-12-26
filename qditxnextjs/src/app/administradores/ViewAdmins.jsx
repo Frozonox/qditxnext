@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./ViewAdmins.modules.css"
+
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
 function ViewAdmins() {
@@ -108,7 +110,8 @@ function ViewAdmins() {
 
 	return (
 		<>
-			<h1 className="text-dark center text-center">Lista de Administradores</h1>
+			<div className="Header">
+			<h1 className="text-light center text-center">Lista de Administradores</h1>
 			<div className="row">
 				<div className="col-md-2">
 					<input
@@ -180,12 +183,13 @@ function ViewAdmins() {
 				</div>
 				<div className="row mt-2">
 					<div className="col-md-6">
-						<button className="btn btn-primary mr-2" onClick={buscar}>
+						<button className="filter__btn" onClick={buscar}>
 							Buscar
 						</button>
-						<button className="btn btn-secondary" onClick={limpiar}>
+						<button className="filter__btn__second" onClick={limpiar}>
 							Limpiar
 						</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -219,9 +223,11 @@ function ViewAdmins() {
 						))}
 				</tbody>
 			</table>
-			<button onClick={() => paginacion(0)}>Anterior</button>
+			<div className="pager">
+			<button className="last__page" onClick={() => paginacion(0)}>Anterior</button>
 			<span>Página {pageNumber + 1}</span>
-			<button onClick={() => paginacion(1)}>Siguiente</button>
+			<button className="next__page" onClick={() => paginacion(1)}>Siguiente</button>
+			</div>
 		</>
 	);
 }
