@@ -32,6 +32,11 @@ function Sidebar() {
             name:"Postulantes",
             href:"/postulantes",
             icon: <i className="bi bi-people-fill"></i>
+        },
+        {
+            name:"Practicas",
+            href:"/practicas",
+            icon: <i className="bi bi-clipboard-check"></i>
         }
     ]
 
