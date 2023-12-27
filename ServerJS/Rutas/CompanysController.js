@@ -33,7 +33,7 @@ RoutersCompany.get(
 				fechaFin,
 			} = req.query;
 
-			let offset = page * 25;
+			let offset = page * 25 ;
 
 			let whereClauses = [];
 
@@ -113,8 +113,8 @@ RoutersCompany.get(
                 OFFSET ${offset}
             `;
 
-			console.log("SQL= " + companyQuery);
-			console.log("Offset: ", offset);
+			// console.log("SQL= " + companyQuery);
+			// console.log("Offset: ", offset);
 
 			conexion.query(companyQuery, queryParams, (error, results) => {
 				if (error) {
