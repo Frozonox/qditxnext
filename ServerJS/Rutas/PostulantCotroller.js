@@ -67,7 +67,7 @@ RouterPostulants.get(
 			}
 
 			postulantsQuery += `
-    LIMIT 25
+    LIMIT 15
     OFFSET ${offset}`;
 
 			// Consulta para obtener el total de datos
