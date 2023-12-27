@@ -1,0 +1,73 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 220px 220px 220px;
+    grid-template-rows: repeat(4, 180px);
+    grid-gap: 10px;
+    /* grid-gap: 2px; */
+    gap: 2px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    /* column-gap: 5px; */
+    row-gap: 40px;
+    margin: 30px;
+    
+  }
+  
+.grid-item {
+    border: 1px solid transparent;
+    padding: 10px;
+    text-align: center;
+  }
+  .last__page
+{
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px;
+    margin: 4px;
+}
+.next__page
+{
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px;
+    margin: 4px;
+}
+.pager
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Header
+{
+    background-color: black;
+    color: white;
+    padding: 30px;
+}
+.filter__btn
+{
+    background-color: rgb(25, 87, 255);
+    color: white;
+    margin: 4px;
+    border: none;
+    padding: 8px;
+    border-radius: 30px;
+    width: max-content;
+}
+.filter__btn__second
+{
+    background-color: rgb(73, 73, 73);
+    color: white;
+    margin: 4px;
+    border: none;
+    padding: 8px;
+    border-radius: 30px;
+    width: max-content;
+}
