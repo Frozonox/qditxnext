@@ -1,8 +1,8 @@
-.band
+/* .band
 {
     border: 4px solid;
-border-color: rgb(0, 223, 0);
-}
+border-color: rgb(33, 137, 255);
+} */
 .box
 {
     display: flex;
@@ -63,4 +63,13 @@ border-color: rgb(0, 223, 0);
 {
     background-color: blue;
     border-radius: 30px;
+}
+.infoxs
+{
+    overflow: hidden;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }

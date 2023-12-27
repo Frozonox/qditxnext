@@ -14,17 +14,19 @@ function OpportunityCard(props) {
         <div className={Styles.title}><span>{props.title}</span></div>
         <div className={Styles.subtitle}><span>{props.subtitle}</span></div>
 
-        <div className={Styles.band}></div>
+        <div style={{border: '4px solid', borderColor: props.color}}></div>
 
         <div >
             <div className={Styles.body}>
-
-                <span className={Styles.company}>{props.company}</span>
                 
+                <div  className={Styles.company}>
+                <span>{props.company}</span>
+                </div>
+                <div className={Styles.infoxs}>
                 <span>{props.payment}</span>
 
                 <span>{props.area}</span>
-                
+                </div>
             </div>
 
             <hr style={{margin: '1px'}}></hr>

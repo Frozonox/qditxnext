@@ -45,15 +45,15 @@ function ViewOportunities() {
 	function colorChoose(type) {
 		switch (type) {
 			case "JOB_OFFER": 
-			return "Green"
+			return "rgb(33, 255, 88)"
 
 			case "ACADEMIC_PRACTICE":
 			
-			return "Blue"
+			return "rgb(33, 137, 255)"
 
 			case "STUDY_WORKING": 
 
-			return "White"
+			return "rgb(255, 140, 220)"
 		
 			default:
 				break;
