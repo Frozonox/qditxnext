@@ -14,37 +14,61 @@ RouterPostulants.get(
 	},
 	async (req, res) => {
 		try {
-			const { page = 0 } = req.query;
+			const { page = 0, names, last_names, code, user_name } = req.query;
 
 			let offset = page * 25;
-			const postulantsQuery = `
-        SELECT  
-          p.postulant_id,		
-          u.name,
-          u.last_name,
-          pp.academic_user,
-          pro_graduate.name AS program_graduate,
-          pro_enrolled.name AS program_enrolled,
-          u.date_update,
-          p.filling_percentage,
-          u.status
-        FROM
-          postulant p
-        LEFT JOIN
-          user u ON u.id = p.postulant_id
-        LEFT JOIN
-          postulant_profile pp ON pp.postulant_id = p.postulant_id
-        LEFT JOIN
-          profile_graduate_program pgp ON pp.id = pgp.profile_id
-        LEFT JOIN
-          program pro_graduate ON pgp.program_id = pro_graduate.id
-        LEFT JOIN
-          profile_enrolled_program pep ON pp.id = pep.profile_id
-        LEFT JOIN
-          program pro_enrolled ON pep.program_id = pro_enrolled.id
-        LIMIT 25
-        OFFSET ${offset}
-      `;
+			let postulantsQuery = `
+  SELECT  
+    p.postulant_id,	
+	u.identification,	
+    u.name,
+    u.last_name,
+    pp.academic_user,
+    pro_graduate.name AS program_graduate,
+    pro_enrolled.name AS program_enrolled,
+    u.date_update,
+    p.filling_percentage,
+    u.status
+  FROM
+    postulant p
+  LEFT JOIN
+    user u ON u.id = p.postulant_id
+  LEFT JOIN
+    postulant_profile pp ON pp.postulant_id = p.postulant_id
+  LEFT JOIN
+    profile_graduate_program pgp ON pp.id = pgp.profile_id
+  LEFT JOIN
+    program pro_graduate ON pgp.program_id = pro_graduate.id
+  LEFT JOIN
+    profile_enrolled_program pep ON pp.id = pep.profile_id
+  LEFT JOIN
+    program pro_enrolled ON pep.program_id = pro_enrolled.id
+`;
+
+			let whereClauses = [];
+
+			if (code) {
+				whereClauses.push(`u.identification = '${code}'`);
+			}
+			if (names) {
+				whereClauses.push(`u.name LIKE '%${names}%'`);
+			}
+
+			if (last_names) {
+				whereClauses.push(`u.last_name = '${last_names}'`);
+			}
+
+			if (user_name) {
+				whereClauses.push(`u.user_name LIKE '%${user_name}%'`);
+			}
+
+			if (whereClauses.length > 0) {
+				postulantsQuery += ` WHERE ${whereClauses.join(" AND ")}`;
+			}
+
+			postulantsQuery += `
+    LIMIT 25
+    OFFSET ${offset}`;
 
 			// Consulta para obtener el total de datos
 			const totalQuery = `
@@ -59,10 +83,17 @@ RouterPostulants.get(
         LEFT JOIN program pro_enrolled ON pep.program_id = pro_enrolled.id
       `;
 
+			const queryParams = [
+				page,
+				code,
+				`%${names}%`,
+				last_names,
+				`%${user_name}%`,
+			];
 			const [results, totalResult] = await Promise.all([
 				// Ejecuta ambas consultas de manera concurrente
 				new Promise((resolve, reject) => {
-					conexion.query(postulantsQuery, (error, results) => {
+					conexion.query(postulantsQuery, queryParams, (error, results) => {
 						if (error) {
 							reject(error);
 						} else {
