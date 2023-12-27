@@ -21,7 +21,7 @@ RouterOpportunitys.get(
 
 			// Calcular los límites del rango
 			const start = page * pageSize + startId;
-			const end = start + 5;
+			const end = start + 14;
 
 			let opportunityQuery = `
     SELECT

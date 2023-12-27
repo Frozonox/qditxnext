@@ -5,11 +5,17 @@ border-color: rgb(0, 223, 0);
 }
 .box
 {
+    display: flex;
     border-left: 2px solid rgb(0, 223, 0);
     background-color: rgb(177, 177, 177);
     width: 200px;
     box-sizing: border-box;
     margin: 10px;
+    height: 210px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    box-shadow: 0px 0px 7px 0px black;
 }
 .title
 {
@@ -28,6 +34,13 @@ border-color: rgb(0, 223, 0);
 {
     color: rgb(82, 82, 82);
     background-color: rgb(177, 177, 177);
+    height: 96px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 .footer
 {
@@ -37,5 +50,17 @@ border-color: rgb(0, 223, 0);
     justify-content: space-between;
 }
 .company{
+    height: 24px;
+    overflow: hidden;
     font-weight: bolder;
   }
+
+.separator
+{
+    margin: 9px;
+}
+.status_col
+{
+    background-color: blue;
+    border-radius: 30px;
+}
