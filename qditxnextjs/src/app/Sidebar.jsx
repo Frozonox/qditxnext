@@ -14,14 +14,24 @@ function Sidebar() {
             icon: <i className="bi bi-house"></i>
         },
         {
-            name: "Admins",
+            name: "Administradores",
             href: "/administradores",
             icon: <i className="bi bi-person-badge-fill"></i>
         },
         {
-            name: "Oportunities",
+            name: "Oportunidades",
             href: "/oportunities",
             icon: <i className="bi bi-briefcase"></i>
+        },
+        {
+            name: "Organizaciónes",
+            href: "/organizaciones",
+            icon: <i className="bi bi-building"></i>
+        },
+        {
+            name:"Postulantes",
+            href:"/postulantes",
+            icon: <i className="bi bi-people-fill"></i>
         }
     ]
 
