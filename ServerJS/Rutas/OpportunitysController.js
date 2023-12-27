@@ -16,11 +16,12 @@ RouterOpportunitys.get(
 		try {
 			let { page = 0 } = req.query;
 
-			const pageSize = 25; // Tamaño de la página
+			const pageSize = 5; // Tamaño de la página
+			const startId = 9; // ID desde el cual comenzar
 
 			// Calcular los límites del rango
-			const start = page === 0 ? 9 : page * pageSize + 1;
-			const end = (page + 1) * pageSize;
+			const start = page * pageSize + startId;
+			const end = start + 5;
 
 			let opportunityQuery = `
     SELECT
@@ -33,6 +34,7 @@ RouterOpportunitys.get(
         CONCAT(ic.value, '-', ic.description) AS ciiu,
         DATE_FORMAT(CONVERT_TZ(o.date_creation, '+00:00', '+00:00'), '%d/%m/%Y') AS date_creation,
         o.job_title,
+        o.status,
         IFNULL(iy.value, 'NO APLICA') AS years_experience,
         COALESCE(
             CASE o.opportunity_type
@@ -68,7 +70,7 @@ RouterOpportunitys.get(
         LEFT JOIN user u ON oa.postulant_id = u.id AND u.status <> 'REMOVED'
     WHERE o.id BETWEEN ${start} AND ${end}
     GROUP BY o.id, c.trade_name, sector, business_sector, ciiu, date_creation, o.job_title,
-        years_experience, salary_range_min, salary_range_max, o.opportunity_type, so.contracted, so.reason, why_no_contracted
+        years_experience, salary_range_min, salary_range_max, o.opportunity_type, so.contracted, so.reason, why_no_contracted, o.status
 `;
 
 			const queryParams = { page };
