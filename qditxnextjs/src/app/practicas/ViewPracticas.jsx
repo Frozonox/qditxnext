@@ -224,7 +224,7 @@ function ViewPracticas() {
 							className="form-control"
 						/>
 					</div>
-                    <div className="col-md-2">
+                    <div className="col-md-2 mt-2">
                     <input
 							value={type_practice}
 							onChange={(e) => {
@@ -235,7 +235,7 @@ function ViewPracticas() {
 							className="form-control"
 						/>
 					</div>
-                    <div className="col-md-2">
+                    <div className="col-md-2 mt-2">
                     <input
 							value={states}
 							onChange={(e) => {
