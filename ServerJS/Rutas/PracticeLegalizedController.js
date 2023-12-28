@@ -86,7 +86,7 @@ RouterPracticesLegalized.get(
 			legalizedQuery += `ORDER BY 
                 apl.date_end_practice DESC
             LIMIT 15
-            OFFSET 0`;
+            OFFSET ${offset}`;
 
 			let totalQuery = `
             SELECT 
