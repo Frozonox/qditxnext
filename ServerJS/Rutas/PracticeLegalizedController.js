@@ -16,20 +16,18 @@ RouterPracticesLegalized.get(
 		try {
 			const {
 				page = 0,
-				code,
-				email,
 				names,
 				last_names,
-				period,
+				code,
 				program,
-				states,
-				type_practice,
+				company,
+				period,
 			} = req.query;
 
 			let offset = page * 15;
 
 			let legalizedQuery = `
-            SELECT 
+            SELECT DISTINCT
                 apl.academic_practice_legalized_id, 
                 u.identification, 
                 u.name, 
@@ -57,6 +55,34 @@ RouterPracticesLegalized.get(
                 user u_tutor ON apl.user_tutor = u_tutor.id
             `;
 
+			let whereClauses = [];
+
+			if (code) {
+				whereClauses.push(`u.identification = '${code}'`);
+			}
+			if (names) {
+				whereClauses.push(`u.name LIKE '%${names}%'`);
+			}
+
+			if (last_names) {
+				whereClauses.push(`u.last_name like '%${last_names}%'`);
+			}
+
+			if (program) {
+				whereClauses.push(`pg.name LIKE '%${program}%'`);
+			}
+
+			if (company) {
+				whereClauses.push(`com.business_name LIKE '%${company}%'`);
+			}
+
+			if (period) {
+				whereClauses.push(`ap.period='${period}'`);
+			}
+			if (whereClauses.length > 0) {
+				legalizedQuery += ` WHERE ${whereClauses.join(" AND ")}`;
+			}
+
 			legalizedQuery += `ORDER BY 
                 apl.date_end_practice DESC
             LIMIT 15
@@ -69,7 +95,15 @@ RouterPracticesLegalized.get(
             FROM
                 academic_practice_legalized apl`;
 
-			const queryParams = [page];
+			const queryParams = [
+				page,
+				`%${names}%`,
+				`%${company}%`,
+				`%${program}%`,
+				`%${last_names}%`,
+				code,
+				period,
+			];
 
 			const [practiceLegalizedResults, totalResult] = await Promise.all([
 				// Ejecutar la consulta de prácticas
