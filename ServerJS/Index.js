@@ -11,6 +11,7 @@ const RoutersCompany = require("./Rutas/CompanysController");
 const RouterOpportunitys = require("./Rutas/OpportunitysController");
 const RouterPostulants = require("./Rutas/PostulantCotroller");
 const RouterPractices = require("./Rutas/PracticesController");
+const RouterPracticesLegalized = require("./Rutas/PracticeLegalizedController");
 
 app.use(cors());
 app.use(express.json());
@@ -58,6 +59,7 @@ app.use("/companys", RoutersCompany);
 app.use("/opportunitys", RouterOpportunitys);
 app.use("/postulants", RouterPostulants);
 app.use("/practices", RouterPractices);
+app.use("/practicesLegalized", RouterPracticesLegalized);
 
 // Set up our server so it will listen on the port
 app.listen(port, function (error) {
