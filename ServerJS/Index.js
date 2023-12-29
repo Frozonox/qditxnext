@@ -13,6 +13,7 @@ const RouterPostulants = require("./Rutas/PostulantCotroller");
 const RouterPractices = require("./Rutas/PracticesController");
 const RouterPracticesLegalized = require("./Rutas/PracticeLegalizedController");
 const routerUploadUsers = require("./uploads/updoladUsers");
+const RouterHome = require("./Rutas/HomeController")
 
 app.use(cors());
 app.use(express.json());
@@ -62,6 +63,7 @@ app.use("/postulants", RouterPostulants);
 app.use("/practices", RouterPractices);
 app.use("/practicesLegalized", RouterPracticesLegalized);
 app.use("/uploadUsers", routerUploadUsers);
+app.use("/home", RouterHome);
 
 // Set up our server so it will listen on the port
 app.listen(port, function (error) {
