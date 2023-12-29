@@ -1,25 +1,14 @@
-// AuthMiddleware.js
 const jwt = require("jsonwebtoken");
 
-let Gtoken;
-
-let verifyToken = (req, res, next) => {
-	let token = req.headers["authorization"];
-
-	if (!token) {
-		return res.status(401).json({ error: "Token no proporcionado" });
+exports.cookieJwtAuth = (req, res, next) => {
+	const token = req.cookies.token;
+	try {
+		const user = jwt.verify(token, "secreto_del_token");
+		req.user = user;
+		next();
+	} catch (err) {
+		console.error("Error al verificar el token:", err);
+		res.clearCookie("token");
+		return res.redirect("/login");
 	}
-	jwt.verify(token, "secreto_del_token", (err, decoded) => {
-		if (err) {
-			return res.status(403).json({ error: "Token inválido" });
-		} else {
-			// Almacenar información del usuario en el objeto de solicitud
-			token = Gtoken;
-			req.user = decoded;
-
-			next();
-		}
-	});
 };
-
-module.exports = { verifyToken };

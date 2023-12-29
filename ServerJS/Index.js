@@ -3,9 +3,9 @@ const app = express();
 const cors = require("cors");
 const conexion = require("./Conexion");
 const port = 8080;
+const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const { verifyToken } = require("./AuthMiddleware");
 const RouterUsers = require("./Rutas/UsersController");
 const RoutersCompany = require("./Rutas/CompanysController");
 const RouterOpportunitys = require("./Rutas/OpportunitysController");
@@ -13,11 +13,12 @@ const RouterPostulants = require("./Rutas/PostulantCotroller");
 const RouterPractices = require("./Rutas/PracticesController");
 const RouterPracticesLegalized = require("./Rutas/PracticeLegalizedController");
 const routerUploadUsers = require("./uploads/updoladUsers");
-const RouterHome = require("./Rutas/HomeController")
+const RouterHome = require("./Rutas/HomeController");
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
-
+let tock;
 app.post("/login", (req, res) => {
 	const { user_name, password } = req.body;
 
@@ -39,13 +40,14 @@ app.post("/login", (req, res) => {
 						{ user_id: results[0].id, user_name },
 						"secreto_del_token",
 						{
-							expiresIn: "1h",
+							expiresIn: "10s",
 						}
 					);
 					//console.log(token);
-					res.setHeader("Authorization", token);
-					Gtoken = token;
-					res.status(200).json({ message: "Login exitoso" });
+					tock = token;
+					res.cookie("token", token);
+
+					return res.redirect("/home");
 				} else {
 					res.status(401).json({ error: "Credenciales incorrectas" });
 				}
@@ -66,13 +68,13 @@ app.use("/uploadUsers", routerUploadUsers);
 app.use("/home", RouterHome);
 
 // Set up our server so it will listen on the port
-app.listen(port, function (error) {
-	// Checking any error occur while listening on port
+const server = app.listen(port, function (error) {
 	if (error) {
-		console.log("Something went wrong", error);
-	}
-	// Else sent message of listening
-	else {
-		console.log("Server is listening on port" + port);
+		console.log("Algo salió mal", error);
+	} else {
+		console.log("El servidor está escuchando en el puerto " + port);
 	}
 });
+
+// Manejar el evento de salida del proceso
+
