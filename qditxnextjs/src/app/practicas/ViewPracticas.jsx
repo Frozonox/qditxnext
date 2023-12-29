@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import './ViewPracticas.modules.css'
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoadScreen from "../LoadScreen";
 
 
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
@@ -20,6 +21,8 @@ function ViewPracticas() {
     const [states, setStates] = useState("");
     const [type_practice, setType] = useState("");
     const [date_update, setUpdate] = useState("");
+
+	const [isLoading, setLoad] = useState(true);
 
 	const [pageNumber, setPageNumber] = useState(0);
 
@@ -68,11 +71,14 @@ function ViewPracticas() {
 
 			}
 			console.log("URL " + url);
+			setLoad(true);
 			const response = await fetch(url);
 			const jsonData = await response.json();
 
+
 			setUsers(jsonData.data);
 			setResults(jsonData.data);
+			setLoad(false);
 		} catch (err) {
 			console.error(err.message);
 		}
@@ -154,7 +160,11 @@ function ViewPracticas() {
 
 	return (
 		<>
-			<div className="Header">
+		{isLoading ? (
+			<LoadScreen />
+		):(
+			<div>
+<div className="Header">
 				<h1 className="text-light center text-center">Lista de estudiantes aptos a prácticas</h1>
 				<div className="row">
 					<div className="col-md-2">
@@ -310,6 +320,9 @@ function ViewPracticas() {
 			<span>Página {pageNumber + 1}</span>
 			<button className="next__page" onClick={() => paginacion(1)}>Siguiente</button>
 			</div>
+			</div>
+		)}
+			
 		</>
 	);
 }

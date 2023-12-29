@@ -42,6 +42,11 @@ function Sidebar() {
             name:"legalizaciones",
             href:"/legalizaciones",
             icon:<i className="bi bi-pencil"></i>
+        },
+        {
+            name: "Cerrar sesión",
+            href:"/",
+            icon:<i className="bi bi-box-arrow-left"></i>
         }
     ]
 

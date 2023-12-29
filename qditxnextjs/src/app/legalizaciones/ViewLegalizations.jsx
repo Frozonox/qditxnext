@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ViewLegalizations.modules.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoadScreen from "../LoadScreen.jsx";
 
 function ViewLegalizations() {
 
@@ -13,6 +14,8 @@ function ViewLegalizations() {
 
 	const isFirstRender = useRef(true);
 	const [pageNumber, setPageNumber] = useState(0);
+
+	const [isLoading, setLoad] = useState(true);
 
             const [names, setNames] = useState("");
 			const [last_names, setLast_names] = useState("");
@@ -68,10 +71,11 @@ function ViewLegalizations() {
                     url += `&period=${period}`;
                 }
             }
-		
+			
+			setLoad(true);
 			const response = await fetch(url);
 			const jsonData = await response.json();
-
+			setLoad(false);
 			setResults(jsonData.data);
 			setLegalizations(jsonData.data);
 
@@ -176,7 +180,12 @@ function ViewLegalizations() {
     }
 
 	return (
-		<div>
+		<>
+		{isLoading ? (
+			<LoadScreen />
+		):(<div>
+
+		
 			<div className="Header">
 				<h1 className="text-light center text-center">Lista de legalizaciones</h1>
 				 <div className="row">
@@ -309,7 +318,9 @@ function ViewLegalizations() {
 					Siguiente
 				</button>
 			</div>
-		</div>
+		</div>)}
+		
+		</>	
 	);
 }
 

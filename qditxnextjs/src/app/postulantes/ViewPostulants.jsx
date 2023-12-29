@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ViewPostulants.modules.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoadScreen from "../LoadScreen";
 
 function ViewPostulants() {
 	const [results, setResults] = useState([]);
@@ -13,6 +14,8 @@ function ViewPostulants() {
 	const [last_names, setLast_names] = useState("");
 	const isFirstRender = useRef(true);
 	const [pageNumber, setPageNumber] = useState(0);
+
+	const [isLoading, setLoad] = useState(true);
 
 	useEffect(() => {
 		// Evita que se ejecute durante la renderización inicial "indefinida"
@@ -31,7 +34,7 @@ function ViewPostulants() {
 			// Construye la URL con los parámetros de filtro si están presentes
 			let url = `http://localhost:8080/postulants?page=${page}`;
 			if (filters) {
-				const { cc, nuser, names, last_names, numero, estado } = filters;
+				const { cc, nuser, names, last_names,} = filters;
 
 				if (cc) {
 					url += `&code=${cc}`;
@@ -49,11 +52,14 @@ function ViewPostulants() {
 					url += `&last_names=${last_names}`;
 				}
 			}
+
+			setLoad(true);
 			const response = await fetch(url);
 			const jsonData = await response.json();
 
 			setResults(jsonData.data);
 			setPostulants(jsonData.data);
+			setLoad(false);
 			// console.log(results);
 		} catch (err) {
 			console.error(err.message);
@@ -102,7 +108,8 @@ function ViewPostulants() {
 	};
 
 	return (
-		<div>
+		<>{isLoading ? (<LoadScreen />):(
+			<div>
 			<div className="Header">
 				<h1 className="text-light center text-center">Lista de postulantes</h1>
 				<div className="row">
@@ -216,6 +223,9 @@ function ViewPostulants() {
 				</button>
 			</div>
 		</div>
+		)}</>
+		
+		
 	);
 }
 

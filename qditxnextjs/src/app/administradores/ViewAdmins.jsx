@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ViewAdmins.modules.css"
 import "bootstrap/dist/css/bootstrap.min.css";
+import LoadScreen from "../LoadScreen";
 
 
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
@@ -15,6 +16,9 @@ function ViewAdmins() {
 	const [last_names, setLast_names] = useState("");
 	const [numero, setNumero] = useState("");
 	const [estado, setEstado] = useState("");
+
+	const [isLoading, setLoad]= useState(true);
+
 	const [pageNumber, setPageNumber] = useState(0);
 	const isFirstRender = useRef(true);
 	const [currentFilters, setCurrentFilters] = useState({});
@@ -54,8 +58,10 @@ function ViewAdmins() {
 				}
 			}
 			console.log("URL " + url);
+			setLoad(true);
 			const response = await fetch(url);
 			const jsonData = await response.json();
+			setLoad(false);
 
 			setUsers(jsonData);
 			setResults(jsonData);
@@ -90,13 +96,16 @@ function ViewAdmins() {
 
 		setCurrentFilters(initialFilters);
 		getAdmins(0, initialFilters);
+
 		setNuser("");
 		setCc("");
 		setLast_names("");
 		setNames("");
 		setNumero("");
 		setEstado("");
+		
 		setResults(users);
+
 		setPageNumber(0);
 	}
 
@@ -111,6 +120,13 @@ function ViewAdmins() {
 
 	return (
 		<>
+		{/*Load Screen*/}
+
+			{isLoading ? (
+				<LoadScreen />
+			):(
+
+			<div>
 			<div className="Header">
 				<h1 className="text-light center text-center">Lista de Administradores</h1>
 				<div className="row">
@@ -231,6 +247,13 @@ function ViewAdmins() {
 			<span>Página {pageNumber + 1}</span>
 			<button className="next__page" onClick={() => paginacion(1)}>Siguiente</button>
 			</div>
+			</div>
+			)}
+
+
+
+		{/*RESULTADOS*/}
+			
 		</>
 	);
 }

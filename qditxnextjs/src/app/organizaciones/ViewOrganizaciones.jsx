@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './ViewOrganizaciones.modules.css'
+import LoadScreen from "../LoadScreen";
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
 export default function ViewOrganizaciones() {
@@ -18,6 +19,8 @@ export default function ViewOrganizaciones() {
 	const [estado, setEstado] = useState("");
 	const [fechaInicio, setFechaInicio] = useState("");
 	const [fechaFin, setFechaFin] = useState("");
+
+	const [isLoading, setLoad]= useState(true);
 
 	const getCompanys = async (page, filters) => {
 		try {
@@ -65,10 +68,12 @@ export default function ViewOrganizaciones() {
 				}
 			}
 			console.log("URL " + url);
+			setLoad(true);
 			const response = await fetch(url);
 			const jsonData = await response.json();
 			setCompanys(jsonData);
 			setResults(jsonData);
+			setLoad(false);
 			console.log(setCompanys);
 		} catch (err) {
 			console.error(err.message);
@@ -132,7 +137,13 @@ export default function ViewOrganizaciones() {
 
 	return (
 		<>
-		<div className="Header">
+
+		{isLoading ? (
+			<LoadScreen />
+		):(
+
+			<div>
+					<div className="Header">
 			<h1 className="text-light center text-center">Lista de Entidades</h1>
 
 			<div className="row justify-content-end">
@@ -282,6 +293,11 @@ export default function ViewOrganizaciones() {
 			<span>Página {pageNumber + 1}</span>
 			<button className="next__page" onClick={() => paginacion(1)}>Siguiente</button>
 			</div>
+			</div>
+
+		)}
+
+	
 		</>
 	);
 }
