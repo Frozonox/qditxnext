@@ -37,6 +37,11 @@ function Sidebar() {
             name:"Practicas",
             href:"/practicas",
             icon: <i className="bi bi-clipboard-check"></i>
+        },
+        {
+            name:"legalizaciones",
+            href:"/legalizaciones",
+            icon:<i className="bi bi-pencil"></i>
         }
     ]
 
