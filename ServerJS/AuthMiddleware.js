@@ -9,6 +9,6 @@ exports.cookieJwtAuth = (req, res, next) => {
 	} catch (err) {
 		console.error("Error al verificar el token:", err);
 		res.clearCookie("token");
-		return res.redirect("/login");
+		return res.redirect("/home");
 	}
 };

@@ -15,10 +15,15 @@ const RouterPracticesLegalized = require("./Rutas/PracticeLegalizedController");
 const routerUploadUsers = require("./uploads/updoladUsers");
 const RouterHome = require("./Rutas/HomeController");
 
-app.use(cors());
+const corsOptions = {
+	origin: "http://localhost:3000", // Especifica el origen permitido
+	credentials: true, // Permite el envío de cookies
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
-let tock;
+
 app.post("/login", (req, res) => {
 	const { user_name, password } = req.body;
 
@@ -28,26 +33,36 @@ app.post("/login", (req, res) => {
 		.digest("hex");
 
 	try {
-		const query =
-			"SELECT * FROM user WHERE user_name = ? AND password_hash = ?";
+		const query = `SELECT u.name AS name_user, u.last_name, r.name AS name_role
+FROM user u
+LEFT JOIN user_role ur ON u.id=ur.user_id
+LEFT JOIN role r ON r.id=ur.role_id WHERE user_name = ? AND password_hash = ?`;
 		conexion.query(query, [user_name, hashedPassword], (error, results) => {
 			if (error) {
 				console.log(error);
 				res.status(500).json({ error: "Internal Server Error" });
 			} else {
+				console.log(results);
+
 				if (results.length > 0) {
 					const token = jwt.sign(
-						{ user_id: results[0].id, user_name },
+						{
+							// user_id: results[0].id,
+							name: results[0].name,
+							last_name: results[0].last_name,
+						},
 						"secreto_del_token",
 						{
-							expiresIn: "10s",
+							expiresIn: "10m",
 						}
 					);
 					//console.log(token);
-					tock = token;
-					res.cookie("token", token);
-
-					return res.redirect("/home");
+					res.cookie("token", token, {
+						httpOnly: false, // Permite que la cookie sea accesible desde el lado del cliente
+						sameSite: "None", // Permite que la cookie se envíe en solicitudes desde un dominio diferente
+					});
+					res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+					res.status(200).json(results);
 				} else {
 					res.status(401).json({ error: "Credenciales incorrectas" });
 				}
@@ -58,7 +73,8 @@ app.post("/login", (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
-app.use("/users", RouterUsers);
+
+app.use("/users", cors(corsOptions), RouterUsers);
 app.use("/companys", RoutersCompany);
 app.use("/opportunitys", RouterOpportunitys);
 app.use("/postulants", RouterPostulants);
@@ -77,4 +93,3 @@ const server = app.listen(port, function (error) {
 });
 
 // Manejar el evento de salida del proceso
-
