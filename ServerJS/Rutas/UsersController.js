@@ -2,24 +2,35 @@ const express = require("express");
 const RouterUsers = express.Router();
 const conexion = require("../Conexion");
 const { cookieJwtAuth } = require("../AuthMiddleware");
+const { LocalStorage } = require("node-localstorage");
+const localStorage = new LocalStorage("./data");
 
-RouterUsers.get("/", cookieJwtAuth, async (req, res) => {
-	try {
-		console.log(req.user);
 
-		const {
-			page = 0,
-			cc,
-			nuser,
-			names,
-			last_names,
-			numero,
-			estado,
-		} = req.query;
+RouterUsers.get(
+	"/",
+	(req, res, next) => {
+		// Obtener el token desde localStorage
+		const token = localStorage.getItem("token");
 
-		let offset = page * 25;
+		// Llamar al middleware con el token
+		cookieJwtAuth(req, res, token, next);
+	},
+	async (req, res) => {
+		try {
+			// console.log(req.user);
+			const {
+				page = 0,
+				cc,
+				nuser,
+				names,
+				last_names,
+				numero,
+				estado,
+			} = req.query;
 
-		let usuariosQuery = `
+			let offset = page * 25;
+
+			let usuariosQuery = `
         SELECT
           us.id,
           us.name,
@@ -35,61 +46,62 @@ RouterUsers.get("/", cookieJwtAuth, async (req, res) => {
           LEFT JOIN role rl ON rl.id = ur.role_id
       `;
 
-		let whereClauses = [];
+			let whereClauses = [];
 
-		if (cc) {
-			whereClauses.push(`us.identification = '${cc}'`);
-		}
+			if (cc) {
+				whereClauses.push(`us.identification = '${cc}'`);
+			}
 
-		if (nuser) {
-			whereClauses.push(`us.user_name LIKE '%${nuser}%'`);
-		}
+			if (nuser) {
+				whereClauses.push(`us.user_name LIKE '%${nuser}%'`);
+			}
 
-		if (names) {
-			whereClauses.push(`us.name = '${names}'`);
-		}
+			if (names) {
+				whereClauses.push(`us.name = '${names}'`);
+			}
 
-		if (last_names) {
-			whereClauses.push(`us.last_name = '${last_names}'`);
-		}
+			if (last_names) {
+				whereClauses.push(`us.last_name = '${last_names}'`);
+			}
 
-		if (numero) {
-			whereClauses.push(`us.movil = '${numero}'`);
-		}
+			if (numero) {
+				whereClauses.push(`us.movil = '${numero}'`);
+			}
 
-		if (estado) {
-			whereClauses.push(
-				`us.status = '${estado === "activo" ? "ACTIVE" : "INACTIVE"}'`
-			);
-		}
+			if (estado) {
+				whereClauses.push(
+					`us.status = '${estado === "activo" ? "ACTIVE" : "INACTIVE"}'`
+				);
+			}
 
-		if (whereClauses.length > 0) {
-			usuariosQuery += ` WHERE ${whereClauses.join(" AND ")}`;
-		}
+			if (whereClauses.length > 0) {
+				usuariosQuery += ` WHERE ${whereClauses.join(" AND ")}`;
+			}
 
-		usuariosQuery += `
+			usuariosQuery += `
         GROUP BY
           us.id
         LIMIT 25
         OFFSET ${offset}
       `;
 
-		// Execute the MySQL query
-		//array con los valores de los parámetros
-		const queryParams = [cc, `%${nuser}%`, names, last_names, numero, estado];
+			// Execute the MySQL query
+			//array con los valores de los parámetros
+			const queryParams = [cc, `%${nuser}%`, names, last_names, numero, estado];
 
-		conexion.query(usuariosQuery, queryParams, (error, results) => {
-			if (error) {
-				console.log(error);
-				res.status(500).json({ error: "Internal Server Error" });
-			} else {
-				// Send the results back to the client
-				res.status(200).json(results);
-			}
-		});
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal Server Error" });
+			conexion.query(usuariosQuery, queryParams, (error, results) => {
+				if (error) {
+					console.log(error);
+					res.status(500).json({ error: "Internal Server Error" });
+				} else {
+					// Send the results back to the client
+					res.status(200).json(results);
+				}
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ error: "Internal Server Error" });
+		}
 	}
-});
+);
 module.exports = RouterUsers;

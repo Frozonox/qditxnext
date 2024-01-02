@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const conexion = require("./Conexion");
 const port = 8080;
-const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const RouterUsers = require("./Rutas/UsersController");
@@ -14,14 +13,11 @@ const RouterPractices = require("./Rutas/PracticesController");
 const RouterPracticesLegalized = require("./Rutas/PracticeLegalizedController");
 const routerUploadUsers = require("./uploads/updoladUsers");
 const RouterHome = require("./Rutas/HomeController");
+const { LocalStorage } = require("node-localstorage");
 
-const corsOptions = {
-	origin: "http://localhost:3000", // Especifica el origen permitido
-	credentials: true, // Permite el envío de cookies
-};
+const localStorage = new LocalStorage("./data");
 
-app.use(cors(corsOptions));
-app.use(cookieParser());
+app.use(cors());
 app.use(express.json());
 
 app.post("/login", (req, res) => {
@@ -57,11 +53,9 @@ LEFT JOIN role r ON r.id=ur.role_id WHERE user_name = ? AND password_hash = ?`;
 						}
 					);
 					//console.log(token);
-					res.cookie("token", token, {
-						httpOnly: false, // Permite que la cookie sea accesible desde el lado del cliente
-						sameSite: "None", // Permite que la cookie se envíe en solicitudes desde un dominio diferente
-					});
-					res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+
+					localStorage.setItem("token", token);
+					// res.header("Access-Control-Allow-Origin", "http://localhost:3000");
 					res.status(200).json(results);
 				} else {
 					res.status(401).json({ error: "Credenciales incorrectas" });
@@ -74,7 +68,7 @@ LEFT JOIN role r ON r.id=ur.role_id WHERE user_name = ? AND password_hash = ?`;
 	}
 });
 
-app.use("/users", cors(corsOptions), RouterUsers);
+app.use("/users", RouterUsers);
 app.use("/companys", RoutersCompany);
 app.use("/opportunitys", RouterOpportunitys);
 app.use("/postulants", RouterPostulants);

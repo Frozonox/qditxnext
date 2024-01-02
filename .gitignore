@@ -5,3 +5,5 @@
 # production
 /build
 ServerJS/.env
+ServerJS/data/token
+ServerJS/data/token
