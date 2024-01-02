@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./ViewAdmins.modules.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LoadScreen from "../LoadScreen";
+import ToggleButton from "@/Toogle.btn/ToggleButton";
 
 // import { BiSearch, BiRefresh } from "react-bootstrap-icons";
 
@@ -21,6 +22,28 @@ function ViewAdmins() {
 	const [pageNumber, setPageNumber] = useState(0);
 	const isFirstRender = useRef(true);
 	const [currentFilters, setCurrentFilters] = useState({});
+
+	async function handleStatus(userState, userID){
+		try {
+		  const response = await fetch(`http://localhost:8080/users/stateUser/${userID}`, {
+			method: 'PUT',
+			headers: {
+			  'Content-Type': 'application/json',
+
+			},
+			body: JSON.stringify({
+			  stateUser: userState
+			}),
+		  });
+	  
+		  console.log(response);
+	  
+		  // Verificar el estado de la respuesta después de haberla impreso
+		  console.log(response.status);
+		} catch (error) {
+		  console.log(error.message);
+		}
+	  }
 
 	const getAdmins = async (page, filters) => {
 		try {
@@ -121,9 +144,9 @@ function ViewAdmins() {
 		<>
 			{/*Load Screen*/}
 
-			{/* {isLoading ? (
+			 {isLoading ? (
 				<LoadScreen />
-			):( */}
+			):( 
 
 			<div>
 				<div className="Header">
@@ -236,7 +259,12 @@ function ViewAdmins() {
 									<td>{user.user_name}</td>
 									<td>{user.roles}</td>
 									<td>{user.movil}</td>
-									<td>{user.status === "ACTIVE" ? "Activo" : "Inactivo"}</td>
+									<td>
+										
+									{user.status === "ACTIVE" ? "Activo" : "Inactivo"} 
+										<ToggleButton  status={user.status === "ACTIVE" ? true : false}  />
+										
+									</td>
 								</tr>
 							))}
 					</tbody>
@@ -251,7 +279,7 @@ function ViewAdmins() {
 					</button>
 				</div>
 			</div>
-			{/* )}a */}
+			 )};
 
 			{/*RESULTADOS*/}
 		</>
