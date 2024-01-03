@@ -94,13 +94,13 @@ function ViewAdmins() {
 
 	useEffect(() => {
 		// Evita que se ejecute durante la renderización inicial "indefinida"
-		if (isFirstRender.current) {
-			isFirstRender.current = false;
-			return;
-		}
+		// if (isFirstRender.current) {
+		// 	isFirstRender.current = false;
+		// 	return;
+		// }
 
 		getAdmins(pageNumber);
-	}, [pageNumber]);
+	}, [!pageNumber]);
 
 	function buscar() {
 		getAdmins(0, { cc, nuser, names, last_names, numero, estado });
