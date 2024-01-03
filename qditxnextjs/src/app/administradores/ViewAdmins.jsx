@@ -260,7 +260,7 @@ function ViewAdmins() {
 									<td>{user.roles}</td>
 									<td>{user.movil}</td>
 									<td>
-										
+										{/*falta implementa al hacer click ejecutar la consulta PUT*/}
 									{user.status === "ACTIVE" ? "Activo" : "Inactivo"} 
 										<ToggleButton  status={user.status === "ACTIVE" ? true : false}  />
 										
